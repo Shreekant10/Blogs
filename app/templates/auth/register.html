@@ -1,0 +1,68 @@
+{% extends 'auth/auth_base.html' %}
+{% load static %}
+
+{% block body %}
+
+	<body>
+		<div class="wrapper">
+			<div class="inner">
+				<!-- <img src="{% static 'reg_images/image-1.png' %}" alt="" class="image-1"> -->
+
+				<form action="" method="post">
+                    {% csrf_token %}
+
+					{% if messages %}
+					{% for message in messages %}
+					<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+						{{ message }}
+						<a href="" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
+					</div>
+					{% endfor %}
+					{% endif %}
+					<br>
+					<br>
+					
+					<h3>New Account?</h3>
+					<div class="form-holder">
+						<span class="lnr lnr-user"></span>
+						<input name="firstname" type="text" class="form-control" placeholder="First Name" required>
+					</div>
+					<div class="form-holder">
+						<span class="lnr lnr-user"></span>
+						<input name="lastname" type="text" class="form-control" placeholder="Last Name" required>
+					</div>
+					<div class="form-holder">
+						<span class="lnr lnr-user"></span>
+						<input name="username" type="text" class="form-control" placeholder="Username" required>
+					</div>
+					<!-- <div class="form-holder">
+						<span class="lnr lnr-phone-handset"></span>
+						<input name="phone_number" type="text" class="form-control" placeholder="Phone Number" required>
+					</div> -->
+					<div class="form-holder">
+						<span class="lnr lnr-envelope"></span>
+						<input name="email_id" type="email" class="form-control" placeholder="Email ID" required>
+					</div>
+					<div class="form-holder">
+						<span class="lnr lnr-lock"></span>
+						<input name="pass1" type="password" class="form-control" placeholder="Password" required>
+					</div>
+					<div class="form-holder">
+						<span class="lnr lnr-lock"></span>
+						<input name="pass2" type="password" class="form-control" placeholder="Confirm Password" required>
+					</div>
+					<button type="submit">
+						<span>Register</span>
+					</button>
+					<br>
+					<center>
+						<span>Already have an Account, Please </span><a href="{% url 'login_url' %}"> Login Here</a>
+					</center>
+				</form>
+				<!-- <img src="{% static 'reg_images/image-2.png' %}" alt="" class="image-2"> -->
+			</div>
+		</div>
+
+
+
+{% endblock body %}

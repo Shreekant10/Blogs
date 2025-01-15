@@ -1,0 +1,397 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block body %}
+
+	<!-- hero section -->
+	<section id="hero">
+		<div class="container-xl">
+			<div class="row gy-4">
+				<div class="col-lg-8">
+					<!-- featured post large -->
+					{% for post in main_post %}
+					<div class="post featured-post-lg">
+						<div class="details clearfix">
+							<a href="" class="category-badge">{{post.category}}</a>
+							{% if user.is_authenticated %}
+							<h2 class="post-title"><a href="{% url 'single_post' post.slug %}">{{post.title}}</a></h2>
+							{% else %}
+							<h2 class="post-title"><a href="{% url 'login_url' %}">{{post.title}}</a></h2>
+							{% endif %}
+							<ul class="meta list-inline mb-0">
+								<li class="list-inline-item"><a href="">{{post.author}}</a></li>
+								<li class="list-inline-item">{{post.date}}</li>
+							</ul>
+						</div>
+						<a href="">
+							<div class="thumb rounded">
+								<div class="inner data-bg-image" data-bg-image="{{post.featured_image.url}}"></div>
+							</div>
+						</a>
+					</div>
+					{% endfor %}
+				</div>
+
+				<div class="col-lg-4">
+					<!-- post tabs -->
+					<div class="post-tabs rounded bordered">
+						<!-- tab navs -->
+						<ul class="nav nav-tabs nav-pills nav-fill" id="postsTab" role="tablist">
+							<li class="nav-item" role="presentation"><button aria-controls="popular" aria-selected="true" class="nav-link active" data-bs-target="#popular" data-bs-toggle="tab" id="popular-tab" role="tab" type="button">Popular</button></li>
+							<li class="nav-item" role="presentation"><button aria-controls="recent" aria-selected="false" class="nav-link" data-bs-target="#recent" data-bs-toggle="tab" id="recent-tab" role="tab" type="button">Latest</button></li>
+						</ul>
+						<!-- tab contents -->
+						<div class="tab-content" id="postsTabContent">
+							<!-- loader -->
+							<div class="lds-dual-ring"></div>
+							<!-- popular posts -->
+							<div aria-labelledby="popular-tab" class="tab-pane fade show active" id="popular" role="tabpanel">		
+								<!-- post -->
+								{% for post in popular_post %}
+								<div class="post post-list-sm circle">
+									<div class="thumb circle">
+										{% if user.is_authenticated %}
+										<a href="{% url 'single_post' post.slug %}">
+										{% else %}
+										<a href="{% url 'login_url' %}">
+										{% endif %}
+											<div class="inner">
+												<img src="{{post.featured_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details clearfix">
+										{% if user.is_authenticated %}
+										<h6 class="post-title my-0"><a href="{% url 'single_post' post.slug %}">{{post.title | truncatechars:55}}</a></h6>
+										{% else %}
+										<h6 class="post-title my-0"><a href="{% url 'login_url' %}">{{post.title | truncatechars:55}}</a></h6>
+										{% endif %}
+										<ul class="meta list-inline mt-1 mb-0">
+											<li class="list-inline-item">{{post.date}}</li>
+										</ul>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+
+							<!-- recent posts -->
+							<div aria-labelledby="recent-tab" class="tab-pane fade" id="recent" role="tabpanel">
+								<!-- post -->
+								{% for post in recent_post %}
+								<div class="post post-list-sm circle">
+									<div class="thumb circle">
+										{% if user.is_authenticated %}
+										<a href="{% url 'single_post' post.slug %}">
+										{% else %}
+										<a href="{% url 'login_url' %}"></a>
+										{% endif %}
+											<div class="inner">
+												<img src="{{post.featured_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details clearfix">
+										{% if user.is_authenticated %}
+										<h6 class="post-title my-0"><a href="{% url 'single_post' post.slug %}">{{post.title | truncatechars:55}}</a></h6>
+										{% else %}
+										<h6 class="post-title my-0"><a href="{% url 'login_url' %}">{{post.title | truncatechars:55}}</a></h6>
+										{% endif %}
+										<ul class="meta list-inline mt-1 mb-0">
+											<li class="list-inline-item">{{post.date}}</li>
+										</ul>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- section main content -->
+	<section class="main-content">
+		<div class="container-xl">
+			<div class="row gy-4">
+				<div class="col-lg-8">
+					<!-- section header -->
+					<div class="section-header">
+						<h3 class="section-title">Editor’s Pick</h3>
+						<!-- <img src="{% static 'images/wave.svg' %}" class="wave" alt="wave" /> -->
+					</div>
+					<div class="padding-30 rounded bordered">
+						<div class="row gy-5">
+							{% for post in editors_pick %}
+							{% if forloop.counter == 1 %}	
+							<div class="col-sm-6">
+								<!-- post -->
+								<div class="post">
+									<div class="thumb rounded">
+										<a href="" class="category-badge position-absolute">{{post.category}}</a>
+										<!-- <span class="post-format">
+											<i class="icon-picture"></i>
+										</span> -->
+										{% if user.is_authenticated %}
+										<a href="{% url 'single_post' post.slug %}">
+										{% else %}
+										<a href="{% url 'login_url' %}">
+										{% endif %}
+											<div class="inner">
+												<img src="{{post.featured_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<ul class="meta list-inline mt-4 mb-0">
+										<li class="list-inline-item"><a href="#">{{post.author}}</a></li>
+										<li class="list-inline-item">{{post.date}}</li>
+									</ul>
+									{% if user.is_authenticated %}
+									<h5 class="post-title mb-3 mt-3"><a href="{% url 'single_post' post.slug %}">{{post.title | truncatechars:40}}</a></h5>
+									{% else %}
+									<h5 class="post-title mb-3 mt-3"><a href="{% url 'login_url' %}">{{post.title | truncatechars:40}}</a></h5>
+									{% endif %}
+									<p class="excerpt mb-0">{{post.content | truncatechars:550 | safe}}</p> 
+								</div>
+							</div>
+							{% endif %}
+							{% endfor %}
+
+							<div class="col-sm-6">
+								<!-- post -->
+								{% for post in editors_pick|slice:"1:6" %} 
+								<div class="post post-list-sm square">
+									<div class="thumb rounded">
+										{% if user.is_authenticated %}
+										<a href="{% url 'single_post' post.slug %}">
+										{% else %}
+										<a href="{% url 'login_url' %}">
+										{% endif %}	
+											<div class="inner">
+												<img src="{{post.featured_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details clearfix">
+										{% if user.is_authenticated %}
+										<h6 class="post-title my-0"><a href="{% url 'single_post' post.slug %}">{{post.title | truncatechars:45}}</a></h6>
+										{% else %}
+										<h6 class="post-title my-0"><a href="{% url 'login_url' %}">{{post.title | truncatechars:45}}</a></h6>
+										{% endif %}
+										<ul class="meta list-inline mt-1 mb-0">
+											<li class="list-inline-item">{{post.date}}</li>
+										</ul>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="spacer" data-height="50"></div>
+
+					<div class="spacer" data-height="50"></div>
+					<!-- section header -->
+					<div class="section-header">
+						<h3 class="section-title">Trending</h3>
+						<!-- <img src="images/wave.svg" class="wave" alt="wave" /> -->
+					</div>
+					<div class="padding-30 rounded bordered">
+						<div class="row gy-5">
+							<div class="col-sm-6">
+								<!-- post large -->
+								{% for post in trending %}
+								{% if forloop.counter == 1 %}
+								<div class="post">
+									<div class="thumb rounded">
+										<a href="" class="category-badge position-absolute">{{post.category}}</a>
+										<!-- <span class="post-format">
+											<i class="icon-picture"></i>
+										</span> -->
+										{% if user.is_authenticated %}
+										<a href="{% url 'single_post' post.slug %}">
+										{% else %}
+										<a href="{% url 'login_url' %}">
+										{% endif %}
+											<div class="inner">
+												<img src="{{post.featured_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<ul class="meta list-inline mt-4 mb-0">
+										<li class="list-inline-item"><a href="#">{{post.author}}</a></li>
+										<li class="list-inline-item">{{post.date}}</li>
+									</ul>
+									{% if user.is_authenticated %}
+									<h5 class="post-title mb-3 mt-3"><a href="{% url 'single_post' post.slug %}">{{post.title | truncatechars:55}}</a></h5>
+									{% else %}
+									<h5 class="post-title mb-3 mt-3"><a href="{% url 'login_url' %}">{{post.title | truncatechars:55}}</a></h5>
+									{% endif %}
+									<p class="excerpt mb-0">{{post.content | safe | truncatechars:250}}</p>
+								</div>
+								{% endif %}
+								{% endfor %}
+
+								{% for post in trending|slice:"1:3" %}
+								<!-- post -->
+								<div class="post post-list-sm square before-seperator">
+									<div class="thumb rounded">
+										{% if user.is_authenticated %}
+										<a href="{% url 'single_post' post.slug %}">
+										{% else %}
+										<a href="{% url 'login_url' %}">
+										{% endif %}	
+											<div class="inner">
+												<img src="{{post.featured_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details clearfix">
+										{% if user.is_authenticated %}
+										<h6 class="post-title my-0"><a href="{% url 'single_post' post.slug %}">{{post.title | truncatechars:45}}</a></h6>
+										{% else %}
+										<h6 class="post-title my-0"><a href="{% url 'login_url' %}">{{post.title | truncatechars:45}}</a></h6>
+										{% endif %}
+										<ul class="meta list-inline mt-1 mb-0">
+											<li class="list-inline-item">{{post.date}}</li>
+										</ul>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+
+							<div class="col-sm-6">
+								<!-- post large -->
+								{% for post in trending %}
+								{% if forloop.counter == 4 %}
+								<div class="post">
+									<div class="thumb rounded">
+										<a href="" class="category-badge position-absolute">{{post.category}}</a>
+										<!-- <span class="post-format">
+											<i class="icon-earphones"></i>
+										</span> -->
+										{% if user.is_authenticated %}
+										<a href="{% url 'single_post' post.slug %}">
+										{% else %}
+										<a href="{% url 'single_post' post.slug %}">
+										{% endif %}
+											<div class="inner">
+												<img src="{{post.featured_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<ul class="meta list-inline mt-4 mb-0">
+										<li class="list-inline-item"><a href="#">{{post.author}}</a></li>
+										<li class="list-inline-item">{{post.date}}</li>
+									</ul>
+									{% if user.is_authenticated %}
+									<h5 class="post-title mb-3 mt-3"><a href="{% url 'single_post' post.slug %}">{{post.title | truncatechars:55}}</a></h5>
+									{% else %}
+									<h5 class="post-title mb-3 mt-3"><a href="{% url 'login_url' %}">{{post.title | truncatechars:55}}</a></h5>
+									{% endif %}
+									<p class="excerpt mb-0">{{post.content | safe | truncatechars:250}}</p>
+								</div>
+								{% endif %}
+								{% endfor %}
+
+								{% for post in trending|slice:"4:" %}
+								<!-- post -->
+								<div class="post post-list-sm square before-seperator">
+									<div class="thumb rounded">
+										{% if user.is_authenticated %}
+										<a href="{% url 'single_post' post.slug %}">
+										{% else %}
+										<a href="{% url 'login_url' %}">
+										{% endif %}
+											<div class="inner">
+												<img src="{{post.featured_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details clearfix">
+										{% if user.is_authenticated %}
+										<h6 class="post-title my-0"><a href="{% url 'single_post' post.slug %}">{{post.title | truncatechars:50}}</a></h6>
+										{% else %}
+										<h6 class="post-title my-0"><a href="{% url 'login_url' %}">{{post.title | truncatechars:50}}</a></h6>
+										{% endif %}
+										<ul class="meta list-inline mt-1 mb-0">
+											<li class="list-inline-item">{{post.date}}</li>
+										</ul>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+
+					<div class="spacer" data-height="50"></div>
+					<div class="spacer" data-height="50"></div>
+
+					<!-- section header -->
+					<div class="section-header">
+						<h3 class="section-title">Latest Posts</h3>
+						<!-- <img src="images/wave.svg" class="wave" alt="wave" /> -->
+					</div>
+					<div class="padding-30 rounded bordered">
+						<div class="row">
+							{% for post in editors_pick %}
+							<div class="col-md-12 col-sm-6">
+								<!-- post -->
+								<div class="post post-list clearfix">
+									<div class="thumb rounded">
+										{% if user.is_authenticated %}
+										<a href="{% url 'single_post' post.slug %}">
+										{% else %}
+										<a href="{% url 'login_url' %}">
+										{% endif %}
+											<div class="inner">
+												<img src="{{post.featured_image.url}}" alt="post-title" />
+											</div>
+										</a>
+									</div>
+									<div class="details">
+										<ul class="meta list-inline mb-3">
+											<li class="list-inline-item"><a href="#">{{post.author}}</a></li>
+											<li class="list-inline-item"><a href="#">{{post.category}}</a></li>
+											<li class="list-inline-item">{{post.date}}</li>
+										</ul>
+										{% if user.is_authenticated %}
+										<h5 class="post-title"><a href="{% url 'single_post' post.slug %}">{{post.title| truncatechars:30}}</a></h5>
+										{% else %}
+										<h5 class="post-title"><a href="{% url 'login_url' %}">{{post.title| truncatechars:30}}</a></h5>
+										{% endif %}
+										<p class="excerpt mb-0">{{post.content | truncatechars:180 | safe}}</p>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+						<!-- load more button --> 
+						<!-- <div class="text-center">
+							<button class="btn btn-simple">Load More</button>
+						</div> -->
+					</div>
+				</div>
+
+				<div class="col-lg-4">
+					<!-- sidebar -->
+					<div class="sidebar">
+						<!-- widget categories -->
+						<div class="widget rounded">
+							<div class="widget-header text-center">
+								<h3 class="widget-title">Explore Categories</h3>
+								<!-- <img src="images/wave.svg" class="wave" alt="wave" /> -->
+							</div>
+							<div class="widget-content">
+								<ul class="list">
+									{% for cat in categories %}
+										<li><a href="{% url 'post_by_category' cat.name %}">{{cat.name}}</a></li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+	
+{% endblock body %}
+
